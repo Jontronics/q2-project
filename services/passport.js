@@ -9,7 +9,18 @@ passport.use(new GoogleStrategy({
     clientID: keys.googleClientID,
     clientSecret: keys.googleClientSecret,
     callbackURL: '/auth/google/callback'
-  }, (accessToken, refreshToken, profile, done) => {
-    new User ({ googleId: profile.id }).save();
+  }, 
+  (accessToken, refreshToken, profile, done) => {
+    User.findOne({ googleId: profile.id }).then((existingUser) => {
+        if (existingUser){
+        // we already have a record of the gieven id
+        
+      } else {
+        // create new record witht his id 
+        new User ({ googleId: profile.id }).save();
+        
+      }
+    })  // mongo query how to avoide duplicate 
+    
   })
 );
